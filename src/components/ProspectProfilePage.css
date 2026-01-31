@@ -1,0 +1,650 @@
+.profile-page-container {
+  max-width: 360px;
+  margin: 0 auto;
+  background-color: #FFFFFF;
+  min-height: 720px;
+  overflow-y: auto;
+  position: relative;
+}
+
+/* Header */
+.profile-header {
+  background-color: #d32f2f;
+  color: white;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 54px;
+}
+
+.back-btn, .language-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 5px 10px;
+}
+
+/* Profile Photo Section */
+.profile-photo-section {
+  position: relative;
+  width: 360px;
+  height: 360px;
+  background: #D9D9D9;
+}
+
+.profile-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photo-overlay-ctas {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  gap: 12px;
+}
+
+.photo-overlay-btn {
+  width: 32px;
+  height: 32px;
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  border-radius: 50%;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.photo-footer {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  padding: 4px 12px;
+  border-radius: 16px;
+  color: white;
+  font-size: 12px;
+}
+
+.nav-arrow {
+  position: absolute;
+  bottom: 8px;
+  background: rgba(0, 0, 0, 0.7);
+  border: none;
+  color: white;
+  font-size: 32px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.nav-arrow-left {
+  left: 8px;
+}
+
+.nav-arrow-right {
+  right: 8px;
+}
+
+/* Tags Section */
+.profile-tags-section {
+  padding: 16px;
+}
+
+.tags-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.paid-tag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #F0EAFF;
+  padding: 4px 12px 4px 4px;
+  border-radius: 12px;
+  font-size: 12px;
+  color: #431E73;
+  font-weight: 500;
+  position: relative;
+}
+
+.crown-icon {
+  width: 24px;
+  height: 24px;
+  background: linear-gradient(180deg, #8F73FF -66.67%, #2C104D 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.verified-tag {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(0, 105, 202, 0.1);
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  color: #0069CA;
+  font-weight: 500;
+}
+
+.verified-icon {
+  background: #0069CA;
+  color: white;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.info-icon {
+  font-size: 14px;
+}
+
+/* Name Section */
+.name-section {
+  padding: 0 16px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile-name {
+  font-family: 'Lato', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: #000000;
+  margin: 0;
+}
+
+.contact-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.contact-icon-btn {
+  width: 28px;
+  height: 28px;
+  border: 1.5px solid #E06506;
+  background: white;
+  border-radius: 50%;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.whatsapp-btn {
+  border-color: #25D366;
+}
+
+/* Meta Info Row */
+.meta-info-row {
+  padding: 0 16px 16px;
+  font-size: 12px;
+  color: #666;
+  line-height: 1.4;
+}
+
+.meta-info-row span {
+  margin: 0 2px;
+}
+
+/* Sticky CTA Bar */
+.sticky-cta-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  max-width: 360px;
+  margin: 0 auto;
+  background: white;
+  padding: 12px 16px;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 90;
+}
+
+.secondary-ctas {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.secondary-cta {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  background: white;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  color: #333;
+}
+
+.dont-show-btn {
+  border-color: #ff6b6b;
+  color: #ff6b6b;
+}
+
+.skip-btn {
+  border-color: #999;
+  color: #999;
+}
+
+.primary-cta {
+  width: 100%;
+  padding: 14px;
+  background: #d32f2f;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.primary-cta:hover {
+  background: #b71c1c;
+}
+
+/* Shimmer effect for Send Message button */
+.primary-cta.shimmer-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.primary-cta.shimmer-effect::before {
+  content: "✓ Send Message";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  color: #DC2626;
+  border: 2px solid #DC2626;
+  border-radius: 6px;
+  animation: shimmerReveal 2s linear forwards;
+  z-index: 1;
+}
+
+@keyframes shimmerReveal {
+  0% {
+    clip-path: inset(0 100% 0 0);
+  }
+  100% {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* Message Sent State - matches card style */
+.message-sent-ctas {
+  display: flex;
+  gap: 8px;
+}
+
+.cta-btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.secondary-red-cta {
+  border: 1.5px solid #DC2626;
+  background: white;
+  color: #DC2626;
+}
+
+.primary-outline-cta {
+  border: 2px solid #DC2626;
+  background: white;
+  color: #DC2626;
+}
+
+.checkmark-icon {
+  color: #DC2626;
+  margin-right: 4px;
+}
+
+/* Communication Header - profile page */
+.profile-communication-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.profile-communication-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.profile-communication-date {
+  font-size: 12px;
+  color: #666;
+}
+
+/* Message Snippet - profile page */
+.profile-message-snippet {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #F8F8F8;
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+}
+
+.profile-snippet-text {
+  font-size: 13px;
+  color: #333;
+  max-width: 50%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profile-read-more-link {
+  background: none;
+  border: none;
+  color: #EA580C;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Call Now button - secondary red style */
+.secondary-cta.call-now-btn {
+  border-color: #DC2626;
+  color: #DC2626;
+}
+
+/* Tertiary style for Don't show */
+.secondary-cta.tertiary-style {
+  border-color: #9CA3AF;
+  color: #9CA3AF;
+}
+
+/* Profile Content */
+.profile-content {
+  padding-bottom: 80px;
+}
+
+/* Profile Sections */
+.profile-section {
+  background-color: white;
+  margin-top: 12px;
+  padding: 20px 16px;
+  border-top: 8px solid #f5f5f5;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #000;
+  margin: 0 0 16px 0;
+  font-family: 'Lato', sans-serif;
+}
+
+.subsection-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin: 16px 0 12px 0;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-label {
+  font-size: 13px;
+  color: #666;
+  flex: 1;
+  font-weight: 400;
+}
+
+.detail-value {
+  font-size: 13px;
+  color: #000;
+  flex: 1;
+  text-align: right;
+  font-weight: 500;
+}
+
+.about-text {
+  font-size: 13px;
+  color: #333;
+  line-height: 1.6;
+  margin: 0;
+  text-align: justify;
+}
+
+/* Kundli Section */
+.kundli-section {
+  background: #FFF9E6;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.kundli-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #0069CA;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.kundli-icon {
+  font-size: 20px;
+}
+
+/* Contact Section */
+.contact-ctas {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.contact-cta {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.whatsapp-cta {
+  background: #25D366;
+  color: white;
+}
+
+.call-cta {
+  background: #E06506;
+  color: white;
+}
+
+/* Partner Preference Section */
+.partner-preference-section {
+  background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+}
+
+.partner-preference-section .detail-row {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.partner-preference-section .detail-label {
+  font-size: 12px;
+  color: #666;
+  margin-bottom: 4px;
+  font-weight: 400;
+}
+
+.partner-preference-section .detail-value {
+  font-size: 14px;
+  color: #000;
+  font-weight: 500;
+  text-align: left;
+  padding-right: 30px;
+}
+
+.preference-match-icon {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+}
+
+.preference-match-icon.match {
+  color: #22c55e;
+}
+
+.preference-match-icon.no-match {
+  color: #ef4444;
+}
+
+.preference-photos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.preference-photo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.preference-photo {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid white;
+}
+
+.placeholder-photo {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.preference-arrow {
+  font-size: 24px;
+  color: #d32f2f;
+  font-weight: 700;
+}
+
+.photo-label {
+  font-size: 11px;
+  color: #666;
+  font-weight: 500;
+}
+
+.matching-score {
+  background-color: white;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.score-label {
+  font-size: 14px;
+  color: #333;
+  font-weight: 600;
+}
+
+.score-value {
+  font-size: 20px;
+  color: #d32f2f;
+  font-weight: 700;
+}
+
+/* Scrollbar styling */
+.profile-page-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.profile-page-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.profile-page-container::-webkit-scrollbar-thumb {
+  background: #d32f2f;
+  border-radius: 3px;
+}
+
+.profile-page-container::-webkit-scrollbar-thumb:hover {
+  background: #b71c1c;
+}
+
+/* Personal Info Section - First section after meta */
+.personal-info-section {
+  margin-top: 0;
+  border-top: none;
+}
