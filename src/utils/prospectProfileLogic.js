@@ -1,6 +1,6 @@
 // Prospect Profile Logic based on operator input
 
-let profileIdCounter = 10735287;
+let profileIdCounter = 1073500;
 
 const usedImages = { male: new Set(), female: new Set() };
 
@@ -296,7 +296,7 @@ export const generateProspectProfile = (operatorInput) => {
 
 // Reset function to clear used resources for new session
 export const resetProfileGeneration = () => {
-  profileIdCounter = 10735287;
+  profileIdCounter = 1073500;
   usedImages.male.clear();
   usedImages.female.clear();
 };

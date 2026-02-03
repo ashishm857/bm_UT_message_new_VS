@@ -1,24 +1,187 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './ProspectProfilePage.css';
 import SavedMessageBottomSheet from './SavedMessageBottomSheet';
+import MessageWindow from './MessageWindow';
 
-const ProspectProfilePage = ({ profile, partnerPreference, onBack, onNext, onPrev, currentIndex, totalProfiles, messageSent: initialMessageSent, sentDate: initialSentDate, sentMessage: initialSentMessage, onSendMessage, onCallNow, onDontShow, onSkip }) => {
+const ProspectProfilePage = ({ profile, partnerPreference, onBack, onBackToMessageWindow, onNext, onPrev, currentIndex, totalProfiles, messageSent: initialMessageSent, sentDate: initialSentDate, sentMessage: initialSentMessage, messageReceived, receivedMessage, receivedDate, onSendMessage, onCallNow, onDontShow, onSkip }) => {
   
+  // Helper to get message state from localStorage
+  const getMessageStateFromStorage = (profileId) => {
+    const saved = localStorage.getItem('matchesProfileStates');
+    if (saved && profileId) {
+      try {
+        const states = JSON.parse(saved);
+        return states[profileId] || null;
+      } catch (e) {
+        return null;
+      }
+    }
+    return null;
+  };
+
+  // Initialize state with lazy initializer to check localStorage on first render
   const [showBottomSheet, setShowBottomSheet] = useState(false);
   const [isShimmering, setIsShimmering] = useState(false);
-  const [messageSent, setMessageSent] = useState(initialMessageSent);
-  const [sentDate, setSentDate] = useState(initialSentDate);
-  const [sentMessage, setSentMessage] = useState(initialSentMessage);
+  const [messageSent, setMessageSent] = useState(() => {
+    const stored = getMessageStateFromStorage(profile?.profileId);
+    return stored?.messageSent ? true : initialMessageSent;
+  });
+  const [sentDate, setSentDate] = useState(() => {
+    const stored = getMessageStateFromStorage(profile?.profileId);
+    return stored?.sentDate || initialSentDate;
+  });
+  const [sentMessage, setSentMessage] = useState(() => {
+    const stored = getMessageStateFromStorage(profile?.profileId);
+    return stored?.sentMessage || initialSentMessage;
+  });
+  const [showMessageWindow, setShowMessageWindow] = useState(false);
+  const [isSliding, setIsSliding] = useState(false);
+  
+  // State for declined (when user clicks Decline button)
+  const [isDeclined, setIsDeclined] = useState(() => {
+    const saved = localStorage.getItem('declinedProfiles');
+    if (saved && profile?.profileId) {
+      const declined = JSON.parse(saved);
+      return declined.includes(profile.profileId);
+    }
+    return false;
+  });
+  
+  // Store shimmer timeout ID and pending message to allow cancellation
+  const shimmerTimeoutRef = useRef(null);
+  const pendingMessageRef = useRef(null);
 
-  // Sync with props when profile changes
+  // Sync state when profile changes
   useEffect(() => {
-    setMessageSent(initialMessageSent);
-    setSentDate(initialSentDate);
-    setSentMessage(initialSentMessage);
+    const profileState = getMessageStateFromStorage(profile?.profileId);
+    if (profileState?.messageSent) {
+      setMessageSent(true);
+      setSentDate(profileState.sentDate || initialSentDate);
+      setSentMessage(profileState.sentMessage || initialSentMessage);
+    } else {
+      setMessageSent(initialMessageSent);
+      setSentDate(initialSentDate);
+      setSentMessage(initialSentMessage);
+    }
+    
+    // Sync declined state
+    const saved = localStorage.getItem('declinedProfiles');
+    if (saved && profile?.profileId) {
+      const declined = JSON.parse(saved);
+      setIsDeclined(declined.includes(profile.profileId));
+    } else {
+      setIsDeclined(false);
+    }
+    
+    // Scroll to top when profile changes
+    window.scrollTo(0, 0);
   }, [profile?.profileId, initialMessageSent, initialSentDate, initialSentMessage]);
+  
+  // Handle browser back button
+  useEffect(() => {
+    const handlePopState = (e) => {
+      e.preventDefault();
+      if (messageReceived && onBackToMessageWindow) {
+        onBackToMessageWindow();
+      } else if (onBack) {
+        onBack();
+      }
+    };
+    
+    // Push a state to handle back button
+    window.history.pushState({ page: 'profile' }, '');
+    window.addEventListener('popstate', handlePopState);
+    
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, [onBack, onBackToMessageWindow, messageReceived]);
+  
+  // Handle decline button click
+  const handleDecline = () => {
+    const saved = localStorage.getItem('declinedProfiles');
+    const declined = saved ? JSON.parse(saved) : [];
+    if (!declined.includes(profile.profileId)) {
+      declined.push(profile.profileId);
+      localStorage.setItem('declinedProfiles', JSON.stringify(declined));
+    }
+    setIsDeclined(true);
+  };
+
+  // Open message window
+  const openMessageWindow = (options = {}) => {
+    setShowMessageWindow(true);
+  };
+
+  // Close message window
+  const closeMessageWindow = () => {
+    setShowMessageWindow(false);
+    setIsEditingMode(false);
+  };
+  
+  // State for editing mode (when shimmer is cancelled)
+  const [isEditingMode, setIsEditingMode] = useState(false);
+
+  // Handle message sent from MessageWindow
+  const handleMessageFromWindow = (message, profileId) => {
+    if (!message) return;
+    
+    const newSentDate = new Date();
+    setMessageSent(true);
+    setSentDate(newSentDate);
+    setSentMessage(message);
+    setIsEditingMode(false);
+    
+    // Update localStorage to persist the state
+    const saved = localStorage.getItem('matchesProfileStates');
+    const states = saved ? JSON.parse(saved) : {};
+    states[profile.profileId] = {
+      ...states[profile.profileId],
+      messageSent: true,
+      sentDate: newSentDate,
+      sentMessage: message
+    };
+    localStorage.setItem('matchesProfileStates', JSON.stringify(states));
+    
+    if (onSendMessage) {
+      onSendMessage(profile.profileId);
+    }
+    
+    // Don't auto-close or auto-navigate - let user click back manually
+  };
 
   // Handle send message button click
   const handleSendMessageClick = () => {
+    // If coming from Received tab, go back to message window
+    if (messageReceived && onBackToMessageWindow) {
+      onBackToMessageWindow();
+      return;
+    }
+    
+    // If message already sent, open message window
+    if (messageSent) {
+      openMessageWindow();
+      return;
+    }
+    
+    // If currently shimmering, cancel the auto-send and open message window for manual typing
+    if (isShimmering) {
+      // Cancel the shimmer timeout
+      if (shimmerTimeoutRef.current) {
+        clearTimeout(shimmerTimeoutRef.current);
+        shimmerTimeoutRef.current = null;
+      }
+      
+      // Stop shimmer
+      setIsShimmering(false);
+      
+      // Open message window in editing mode (blank chat)
+      setIsEditingMode(true);
+      setShowMessageWindow(true);
+      
+      return;
+    }
+    
     if (!messageSent) {
       // Check if bottom sheet has already been shown this session
       const bottomSheetShown = localStorage.getItem('bottomSheetShown') === 'true';
@@ -47,10 +210,17 @@ const ProspectProfilePage = ({ profile, partnerPreference, onBack, onNext, onPre
 
   // Send message with shimmer effect
   const sendMessageWithShimmer = (message) => {
+    // Store the pending message so we can retrieve it if user cancels
+    pendingMessageRef.current = message;
+    
     setIsShimmering(true);
 
     // After 2 seconds, mark as sent and stop shimmer
-    setTimeout(() => {
+    const timeoutId = setTimeout(() => {
+      // Clear the stored timeout and pending message
+      shimmerTimeoutRef.current = null;
+      pendingMessageRef.current = null;
+      
       const newSentDate = new Date();
       setIsShimmering(false);
       setMessageSent(true);
@@ -71,7 +241,21 @@ const ProspectProfilePage = ({ profile, partnerPreference, onBack, onNext, onPre
       if (onSendMessage) {
         onSendMessage(profile.profileId);
       }
+      
+      // Show sent status for 1 second, then slide to next profile
+      if (onNext && currentIndex < totalProfiles - 1) {
+        setTimeout(() => {
+          setIsSliding(true);
+          setTimeout(() => {
+            setIsSliding(false);
+            onNext();
+          }, 400);
+        }, 1000); // Wait 1 second to show sent status
+      }
     }, 2000);
+    
+    // Store the timeout ID so we can cancel it
+    shimmerTimeoutRef.current = timeoutId;
   };
 
   // Handle message sent from bottom sheet
@@ -80,8 +264,6 @@ const ProspectProfilePage = ({ profile, partnerPreference, onBack, onNext, onPre
     
     // Mark that bottom sheet has been shown this session
     localStorage.setItem('bottomSheetShown', 'true');
-    // Save the message as the session default
-    localStorage.setItem('sessionDefaultMessage', message);
     
     // Send with shimmer effect
     sendMessageWithShimmer(message);
@@ -99,7 +281,10 @@ const ProspectProfilePage = ({ profile, partnerPreference, onBack, onNext, onPre
 
   const handleBackClick = () => {
     console.log('Back button clicked!');
-    if (onBack) {
+    // If coming from received message, go back to message window
+    if (messageReceived && onBackToMessageWindow) {
+      onBackToMessageWindow();
+    } else if (onBack) {
       onBack();
     } else {
       console.error('onBack is not defined!');
@@ -119,11 +304,19 @@ const ProspectProfilePage = ({ profile, partnerPreference, onBack, onNext, onPre
   }
 
   return (
-    <div className="profile-page-container">
+    <div className={`profile-page-container ${isSliding ? 'slide-out' : ''}`}>
       <div className="profile-header">
         <button className="back-btn" onClick={handleBackClick}>←</button>
         <button className="language-btn">🌐</button>
       </div>
+
+      {/* Fixed Navigation Arrows */}
+      {currentIndex > 0 && (
+        <button className="nav-arrow nav-arrow-left" onClick={onPrev}>‹</button>
+      )}
+      {currentIndex < totalProfiles - 1 && (
+        <button className="nav-arrow nav-arrow-right" onClick={onNext}>›</button>
+      )}
 
       <div className="profile-content">
         {/* Profile Picture Section */}
@@ -140,14 +333,6 @@ const ProspectProfilePage = ({ profile, partnerPreference, onBack, onNext, onPre
           <div className="photo-footer">
             <span className="photo-count">📸 1</span>
           </div>
-          
-          {/* Navigation Arrows */}
-          {currentIndex > 0 && (
-            <button className="nav-arrow nav-arrow-left" onClick={onPrev}>‹</button>
-          )}
-          {currentIndex < totalProfiles - 1 && (
-            <button className="nav-arrow nav-arrow-right" onClick={onNext}>›</button>
-          )}
         </div>
 
         {/* Tags and Name Section */}
@@ -189,7 +374,54 @@ const ProspectProfilePage = ({ profile, partnerPreference, onBack, onNext, onPre
 
         {/* Sticky CTA */}
         <div className="sticky-cta-bar">
-          {messageSent ? (
+          {messageReceived ? (
+            /* Received message state - from Received tab */
+            <>
+              {/* Communication Header */}
+              <div className="profile-communication-header">
+                <p className="profile-communication-text">
+                  {isDeclined 
+                    ? `You have declined ${profile.gender === 'Male' ? 'his' : 'her'} request`
+                    : `${profile.gender === 'Male' ? 'He' : 'She'} sent you a message`
+                  }
+                </p>
+                <span className="profile-communication-date">
+                  {formatDate(receivedDate)}
+                </span>
+              </div>
+              
+              {/* Message Snippet */}
+              <div className="profile-message-snippet">
+                <p className="profile-snippet-text">
+                  {receivedMessage ? receivedMessage.substring(0, 30) + '...' : 'Greeting! We came across'}
+                </p>
+                <button 
+                  className="profile-read-more-link"
+                  onClick={openMessageWindow}
+                >
+                  Read More →
+                </button>
+              </div>
+
+              {/* CTAs - side by side or full width */}
+              <div className="message-sent-ctas">
+                {!isDeclined && (
+                  <button 
+                    className="cta-btn tertiary-cta"
+                    onClick={handleDecline}
+                  >
+                    Decline
+                  </button>
+                )}
+                <button 
+                  className="cta-btn primary-cta"
+                  onClick={handleSendMessageClick}
+                >
+                  Send Reply
+                </button>
+              </div>
+            </>
+          ) : messageSent ? (
             /* After message sent - matches card style */
             <>
               {/* Communication Header */}
@@ -207,7 +439,10 @@ const ProspectProfilePage = ({ profile, partnerPreference, onBack, onNext, onPre
                 <p className="profile-snippet-text">
                   {sentMessage ? sentMessage.substring(0, 30) + '...' : 'Greetings, we came across'}
                 </p>
-                <button className="profile-read-more-link">
+                <button 
+                  className="profile-read-more-link"
+                  onClick={openMessageWindow}
+                >
                   Read More →
                 </button>
               </div>
@@ -220,7 +455,10 @@ const ProspectProfilePage = ({ profile, partnerPreference, onBack, onNext, onPre
                 >
                   Call Now
                 </button>
-                <button className="cta-btn primary-outline-cta">
+                <button 
+                  className="cta-btn primary-outline-cta"
+                  onClick={handleSendMessageClick}
+                >
                   <span className="checkmark-icon">✓</span> Send Message
                 </button>
               </div>
@@ -246,7 +484,7 @@ const ProspectProfilePage = ({ profile, partnerPreference, onBack, onNext, onPre
                 className={`primary-cta ${isShimmering ? 'shimmer-effect' : ''}`}
                 onClick={handleSendMessageClick}
               >
-                Send Message
+                {isShimmering ? 'Edit Message' : 'Send Message'}
               </button>
             </>
           )}
@@ -617,6 +855,20 @@ const ProspectProfilePage = ({ profile, partnerPreference, onBack, onNext, onPre
         <SavedMessageBottomSheet
           onContinue={handleMessageSent}
           onClose={() => setShowBottomSheet(false)}
+        />
+      )}
+
+      {/* Message Window */}
+      {showMessageWindow && (
+        <MessageWindow
+          profile={{
+            ...profile,
+            sentMessage: isEditingMode ? null : sentMessage,
+            sentDate: isEditingMode ? null : sentDate,
+            isEditing: isEditingMode
+          }}
+          onClose={closeMessageWindow}
+          onSendMessage={handleMessageFromWindow}
         />
       )}
     </div>

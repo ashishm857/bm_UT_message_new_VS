@@ -1,26 +1,66 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './SavedMessageBottomSheet.css';
 
-const SavedMessageBottomSheet = ({ onContinue, onClose }) => {
-  const [selectedDraft, setSelectedDraft] = useState(0); // null when compose is active
+const SavedMessageBottomSheet = ({ onContinue, onClose, initialComposeMessage = '' }) => {
+  // Default draft messages
+  const defaultDraftMessages = [
+    "Hi! I came across your profile and found it interesting. Would love to connect and know more about you.",
+    "Your profile caught my attention. I believe we share similar values and interests. Looking forward to hearing from you!",
+    "Hello! I'm interested in getting to know you better. Let's connect and see if we're a good match."
+  ];
+
+  // Load saved messages from session storage (includes user-composed messages)
+  const loadSavedMessages = () => {
+    const saved = localStorage.getItem('sessionSavedMessages');
+    if (saved) {
+      return JSON.parse(saved);
+    }
+    return defaultDraftMessages;
+  };
+
+  const [savedMessages, setSavedMessages] = useState(loadSavedMessages);
+  const [selectedDraft, setSelectedDraft] = useState(null); // Will be set from localStorage
   const [isComposeExpanded, setIsComposeExpanded] = useState(false);
   const [customMessage, setCustomMessage] = useState('');
   const [setAsDefault, setSetAsDefault] = useState(true); // Default checked
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [isComposeActive, setIsComposeActive] = useState(false); // Track if compose message is being used
 
-  const draftMessages = [
-    "Hi! I came across your profile and found it interesting. Would love to connect and know more about you.",
-    "Your profile caught my attention. I believe we share similar values and interests. Looking forward to hearing from you!",
-    "Hello! I'm interested in getting to know you better. Let's connect and see if we're a good match."
-  ];
+  // Load the default message and pre-select matching radio button
+  useEffect(() => {
+    const sessionDefault = localStorage.getItem('sessionDefaultMessage');
+    const messages = loadSavedMessages();
+    if (sessionDefault) {
+      const index = messages.findIndex(msg => msg === sessionDefault);
+      setSelectedDraft(index >= 0 ? index : 0);
+    } else {
+      setSelectedDraft(0);
+    }
+  }, []);
 
-  // Handle radio button selection
+  // If initialComposeMessage is provided, expand compose and fill it
+  useEffect(() => {
+    if (initialComposeMessage) {
+      setCustomMessage(initialComposeMessage);
+      setIsComposeExpanded(true);
+      setIsComposeActive(true);
+      setSelectedDraft(null); // Deselect radio buttons
+    }
+  }, [initialComposeMessage]);
+
+  // Save messages to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('sessionSavedMessages', JSON.stringify(savedMessages));
+  }, [savedMessages]);
+
+  // Handle radio button selection - this sets the default message
   const handleRadioSelect = (index) => {
     setSelectedDraft(index);
     setIsComposeActive(false); // Deactivate compose
     setIsComposeExpanded(false); // Collapse compose section
     setCustomMessage(''); // Clear custom message
+    // Update sessionDefaultMessage immediately when radio is selected
+    localStorage.setItem('sessionDefaultMessage', savedMessages[index]);
   };
 
   // Handle custom message change - deselect radio buttons when typing
@@ -41,10 +81,26 @@ const SavedMessageBottomSheet = ({ onContinue, onClose }) => {
     if (isComposeActive && customMessage.trim()) {
       return customMessage.trim();
     }
-    return draftMessages[selectedDraft] || draftMessages[0];
+    return savedMessages[selectedDraft] || savedMessages[0];
   };
 
   const handleContinue = () => {
+    // If compose is active with a new message, add it to saved messages and set as default
+    if (isComposeActive && customMessage.trim()) {
+      const newMessage = customMessage.trim();
+      // Set composed message as the default
+      localStorage.setItem('sessionDefaultMessage', newMessage);
+      // Check if message already exists
+      if (!savedMessages.includes(newMessage)) {
+        // Add to beginning of list and select it
+        const updatedMessages = [newMessage, ...savedMessages];
+        setSavedMessages(updatedMessages);
+        setSelectedDraft(0); // Select the newly added message
+        setIsComposeActive(false);
+        setCustomMessage('');
+        setIsComposeExpanded(false);
+      }
+    }
     setShowConfirmation(true);
   };
 
@@ -98,7 +154,7 @@ const SavedMessageBottomSheet = ({ onContinue, onClose }) => {
         <div className="saved-messages-section">
           <h4 className="section-heading">Saved Message</h4>
           
-          {draftMessages.map((message, index) => (
+          {savedMessages.map((message, index) => (
             <div key={index} className="message-draft">
               <input
                 type="radio"
@@ -127,6 +183,9 @@ const SavedMessageBottomSheet = ({ onContinue, onClose }) => {
 
           {isComposeExpanded && (
             <div className="compose-content">
+              {isComposeActive && customMessage.trim() && (
+                <span className="compose-default-tag">Default</span>
+              )}
               <textarea
                 className="compose-textarea"
                 placeholder="Type your message here..."
@@ -134,16 +193,6 @@ const SavedMessageBottomSheet = ({ onContinue, onClose }) => {
                 onChange={(e) => handleCustomMessageChange(e.target.value)}
                 rows={4}
               />
-              
-              <div className="checkbox-group">
-                <input
-                  type="checkbox"
-                  id="set-default"
-                  checked={setAsDefault}
-                  onChange={(e) => setSetAsDefault(e.target.checked)}
-                />
-                <label htmlFor="set-default">Set as default message for all future interest</label>
-              </div>
             </div>
           )}
         </div>

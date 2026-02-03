@@ -24,8 +24,8 @@
 
 /* Bottom Sheet */
 .bottom-sheet {
-  max-width: 360px;
   width: 100%;
+  max-width: 100%;
   background: white;
   border-radius: 16px 16px 0 0;
   padding: 20px;
@@ -127,6 +127,9 @@
   color: #333;
   line-height: 1.5;
   flex: 1;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .default-badge {
@@ -170,11 +173,27 @@
 
 .compose-content {
   margin-top: 12px;
+  position: relative;
+}
+
+.compose-default-tag {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: #FFCC80;
+  color: #5D4037;
+  font-size: 8px;
+  font-weight: 600;
+  padding: 2px 5px;
+  border-radius: 6px;
+  text-transform: uppercase;
+  z-index: 1;
 }
 
 .compose-textarea {
   width: 100%;
   padding: 12px;
+  padding-top: 24px;
   border: 1px solid #ddd;
   border-radius: 8px;
   font-size: 14px;

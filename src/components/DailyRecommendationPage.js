@@ -63,6 +63,19 @@ const DailyRecommendationPage = ({ profiles, partnerPreferences, onBack, onExhau
     setHasShownSavedMessage(true);
     setShowSavedMessage(false);
     
+    // Save the profile and message to matchesProfileStates for Awaiting Response tab
+    const currentProfile = profiles[currentIndex];
+    const saved = localStorage.getItem('matchesProfileStates');
+    const states = saved ? JSON.parse(saved) : {};
+    states[currentProfile.profileId] = {
+      ...states[currentProfile.profileId],
+      messageSent: true,
+      sentMessage: message,
+      sentDate: new Date().toISOString(),
+      profile: currentProfile
+    };
+    localStorage.setItem('matchesProfileStates', JSON.stringify(states));
+    
     // Now perform the swipe right action
     performSwipeTransition('right', 'Interested');
   };

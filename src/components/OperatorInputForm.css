@@ -1,5 +1,6 @@
 .operator-form-container {
-  max-width: 360px;
+  width: 100%;
+  max-width: 100%;
   margin: 0 auto;
   padding: 20px;
   background-color: #ffffff;

@@ -1,0 +1,316 @@
+/* Messages Screen Container */
+.messages-screen {
+  width: 100%;
+  max-width: 100%;
+  min-height: 720px;
+  margin: 0 auto;
+  background-color: #F1F1F1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Messages Header */
+.messages-header {
+  background: white;
+  padding: 16px;
+  border-bottom: 1px solid #E0E0E0;
+}
+
+.messages-header h1 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+/* Messages Tabs */
+.messages-tabs {
+  display: flex;
+  background: white;
+  border-bottom: 1px solid #E0E0E0;
+}
+
+.messages-tab {
+  flex: 1;
+  padding: 12px 8px;
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.messages-tab.active {
+  color: #E53935;
+  border-bottom-color: #E53935;
+}
+
+.messages-tab:hover:not(.active) {
+  color: #333;
+}
+
+/* Messages Content */
+.messages-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 70px;
+}
+
+/* Utility Chips Row with Context */
+.utility-chips-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: white;
+  border-bottom: 1px solid #E0E0E0;
+}
+
+.context-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.context-text p {
+  font-size: 12px;
+  color: #000000;
+  margin: 0;
+  line-height: 1.3;
+}
+
+/* Utility Chips */
+.utility-chips {
+  display: flex;
+  gap: 8px;
+}
+
+.utility-chip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  background: #F5F5F5;
+  border: 1px solid #E0E0E0;
+  border-radius: 16px;
+  font-size: 12px;
+  color: #666;
+  cursor: pointer;
+}
+
+.utility-chip.filter-chip {
+  padding: 6px 8px;
+}
+
+/* Message Listing */
+.message-listing {
+  background: white;
+}
+
+/* Message Strip Card */
+.message-strip-card {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  background: white;
+  border-bottom: 1px solid #F0F0F0;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.message-strip-card:hover {
+  background: #FAFAFA;
+}
+
+.message-strip-card.unread {
+  background: #FFF3F3;
+}
+
+/* Message Photo Container */
+.message-photo-container {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.message-profile-photo {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.online-indicator {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 12px;
+  height: 12px;
+  background: #4CAF50;
+  border: 2px solid white;
+  border-radius: 50%;
+}
+
+/* Message Content */
+.message-content {
+  flex: 1;
+  margin-left: 12px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.message-sender-name {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.message-snippet {
+  font-size: 13px;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Message Meta */
+.message-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+
+.message-date {
+  font-size: 11px;
+  color: #999;
+  white-space: nowrap;
+}
+
+.unread-badge {
+  width: 18px;
+  height: 18px;
+  background: #E53935;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* Empty State */
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  background: white;
+}
+
+.empty-state p {
+  font-size: 14px;
+  color: #999;
+}
+
+/* Bottom Navigation - reusing from MatchesScreen */
+.messages-screen .bottom-navigation {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  justify-content: space-around;
+  background: white;
+  padding: 8px 0;
+  border-top: 1px solid #E0E0E0;
+  z-index: 100;
+}
+
+.messages-screen .nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-size: 10px;
+  color: #999;
+  cursor: default;
+  position: relative;
+}
+
+.messages-screen .nav-item.active {
+  color: #4CAF50;
+}
+
+.messages-screen .nav-item.active svg {
+  stroke: #4CAF50;
+}
+
+.messages-screen .nav-item.clickable {
+  cursor: pointer;
+}
+
+.messages-screen .nav-item.clickable:hover {
+  color: #666;
+}
+
+.messages-screen .nav-item.disabled {
+  opacity: 0.5;
+}
+
+.messages-screen .nav-item span {
+  font-size: 10px;
+}
+
+.messages-screen .upgrade-badge {
+  position: absolute;
+  top: -8px;
+  right: -12px;
+  background: #FF9800;
+  color: white;
+  font-size: 8px;
+  padding: 2px 4px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.messages-screen .profile-nav {
+  position: relative;
+}
+
+.messages-screen .profile-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid #E0E0E0;
+}
+
+.messages-screen .profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.messages-screen .dropdown-arrow {
+  position: absolute;
+  bottom: 12px;
+  right: -4px;
+  background: #333;
+  border-radius: 50%;
+  padding: 1px;
+}

@@ -39,7 +39,7 @@ const RecommendationCard = ({
       
       const minSwipeDistance = 50;
       
-      // Determine swipe direction based on larger delta
+      // Only handle horizontal swipes (removed vertical to allow scrolling)
       if (Math.abs(deltaX) > Math.abs(deltaY)) {
         // Horizontal swipe
         if (Math.abs(deltaX) > minSwipeDistance) {
@@ -47,15 +47,6 @@ const RecommendationCard = ({
             onSwipeRight();
           } else {
             onSwipeLeft();
-          }
-        }
-      } else {
-        // Vertical swipe
-        if (Math.abs(deltaY) > minSwipeDistance) {
-          if (deltaY < 0) {
-            onSwipeUp();
-          } else {
-            onSwipeDown();
           }
         }
       }
@@ -80,7 +71,7 @@ const RecommendationCard = ({
       
       const minSwipeDistance = 50;
       
-      // Determine swipe direction based on larger delta
+      // Only handle horizontal swipes (removed vertical to allow scrolling)
       if (Math.abs(deltaX) > Math.abs(deltaY)) {
         // Horizontal swipe
         if (Math.abs(deltaX) > minSwipeDistance) {
@@ -88,15 +79,6 @@ const RecommendationCard = ({
             onSwipeRight();
           } else {
             onSwipeLeft();
-          }
-        }
-      } else {
-        // Vertical swipe
-        if (Math.abs(deltaY) > minSwipeDistance) {
-          if (deltaY < 0) {
-            onSwipeUp();
-          } else {
-            onSwipeDown();
           }
         }
       }

@@ -1,0 +1,713 @@
+/* Received Message Window Overlay */
+.received-message-window-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Received Message Window */
+.received-message-window {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  max-height: 100vh;
+  background: #F5F5F5;
+  display: flex;
+  flex-direction: column;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+/* Header */
+.rmw-header {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  background: white;
+  color: #333;
+  gap: 12px;
+  border-bottom: 1px solid #E0E0E0;
+}
+
+.rmw-header .back-btn {
+  background: none;
+  border: none;
+  color: #333;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rmw-header .header-profile-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.rmw-header .header-profile-pic {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #E0E0E0;
+}
+
+.rmw-header .header-profile-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.rmw-header .header-profile-name {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  color: #333;
+}
+
+.rmw-header .header-profile-meta {
+  font-size: 11px;
+  color: #666;
+  margin: 0;
+}
+
+.rmw-header .header-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.rmw-header .header-action-btn {
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Tabs */
+.rmw-tabs {
+  display: flex;
+  background: white;
+  border-bottom: 1px solid #E0E0E0;
+}
+
+.rmw-tabs .tab-btn {
+  flex: 1;
+  padding: 12px 16px;
+  background: none;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: #666;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+}
+
+.rmw-tabs .tab-btn.active {
+  color: #E53935;
+  border-bottom-color: #E53935;
+}
+
+/* Profile Card */
+.rmw-profile-card {
+  display: flex;
+  padding: 16px;
+  background: white;
+  gap: 12px;
+  border-bottom: 1px solid #E0E0E0;
+}
+
+.rmw-profile-card.clickable {
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.rmw-profile-card.clickable:hover {
+  background-color: #f5f5f5;
+}
+
+.rmw-profile-card .profile-card-photo {
+  width: 80px;
+  height: 80px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.rmw-profile-card .profile-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.rmw-profile-card .profile-card-tags {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+
+.rmw-profile-card .msg-paid-tag {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #FF9800;
+}
+
+.rmw-profile-card .msg-verified-tag {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #4CAF50;
+}
+
+.rmw-profile-card .profile-card-meta {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.rmw-profile-card .profile-card-meta span {
+  margin: 0 2px;
+}
+
+/* Messages Area */
+.rmw-messages-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rmw-messages-area .date-separator {
+  display: flex;
+  justify-content: center;
+  margin: 8px 0;
+}
+
+.rmw-messages-area .date-separator span {
+  background: #E0E0E0;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  color: #666;
+}
+
+.rmw-messages-area .message-bubble {
+  max-width: 85%;
+  padding: 12px 16px;
+  border-radius: 16px;
+  position: relative;
+}
+
+.rmw-messages-area .message-bubble.received {
+  background: white;
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+  margin-right: auto;
+}
+
+.rmw-messages-area .message-bubble.sent {
+  background: #F7C600;
+  color: #000;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+  margin-left: auto;
+}
+
+.rmw-messages-area .message-bubble.sent .message-text {
+  color: #000;
+}
+
+.rmw-messages-area .message-text {
+  font-size: 14px;
+  color: #333;
+  margin: 0 0 4px 0;
+  line-height: 1.4;
+}
+
+.rmw-messages-area .message-time {
+  font-size: 11px;
+  color: #999;
+  display: block;
+  text-align: right;
+}
+
+/* Profile Content */
+.rmw-profile-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+  background: #F5F5F5;
+}
+
+.rmw-profile-content .profile-tab-photo-section {
+  position: relative;
+  width: 100%;
+  height: 280px;
+}
+
+.rmw-profile-content .profile-tab-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.rmw-profile-content .profile-tab-photo-overlay {
+  position: absolute;
+  bottom: 8px;
+  left: 8px;
+}
+
+.rmw-profile-content .photo-count-badge {
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+.rmw-profile-content .profile-tab-tags {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  background: white;
+  border-bottom: 1px solid #E0E0E0;
+}
+
+.rmw-profile-content .msg-paid-tag,
+.rmw-profile-content .msg-verified-tag {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+}
+
+.rmw-profile-content .msg-paid-tag {
+  color: #FF9800;
+}
+
+.rmw-profile-content .msg-verified-tag {
+  color: #4CAF50;
+}
+
+.rmw-profile-content .profile-tab-name-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: white;
+  border-bottom: 1px solid #E0E0E0;
+}
+
+.rmw-profile-content .profile-tab-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.rmw-profile-content .profile-tab-contact-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.rmw-profile-content .profile-tab-contact-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid #E0E0E0;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.rmw-profile-content .profile-tab-contact-btn.whatsapp {
+  background: #25D366;
+  border-color: #25D366;
+}
+
+.rmw-profile-content .profile-tab-meta {
+  padding: 12px 16px;
+  background: white;
+  font-size: 12px;
+  color: #666;
+  line-height: 1.6;
+  border-bottom: 1px solid #E0E0E0;
+}
+
+.rmw-profile-content .profile-tab-section {
+  background: white;
+  margin-top: 8px;
+  padding: 16px;
+}
+
+.rmw-profile-content .profile-tab-section-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin: 0 0 12px 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #E0E0E0;
+}
+
+.rmw-profile-content .profile-detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #F0F0F0;
+}
+
+.rmw-profile-content .profile-detail-row:last-child {
+  border-bottom: none;
+}
+
+.rmw-profile-content .detail-label {
+  font-size: 13px;
+  color: #666;
+}
+
+.rmw-profile-content .detail-value {
+  font-size: 13px;
+  color: #333;
+  font-weight: 500;
+}
+
+.rmw-profile-content .about-text {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* Reply Chips Section */
+.rmw-reply-chips-section {
+  display: flex;
+  align-items: flex-start;
+  padding: 12px;
+  background: white;
+  border-top: 1px solid #E0E0E0;
+  gap: 8px;
+}
+
+.rmw-reply-chips-section .ai-refresh-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.rmw-reply-chips-section .ai-refresh-icon.rotating svg {
+  animation: rotate360 0.5s ease-in-out;
+}
+
+@keyframes rotate360 {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.rmw-reply-chips-section .reply-chips {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  flex: 1;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.rmw-reply-chips-section .reply-chips::-webkit-scrollbar {
+  display: none;
+}
+
+.rmw-reply-chips-section .reply-chip {
+  padding: 8px 12px;
+  border-radius: 16px;
+  border: none;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+/* Pastel green for default reply chips */
+.rmw-reply-chips-section .default-reply-chip {
+  background: #C8E6C9;
+  color: #2E7D32;
+}
+
+.rmw-reply-chips-section .default-reply-chip:hover {
+  background: #A5D6A7;
+}
+
+/* Pastel red for AI chips */
+.rmw-reply-chips-section .ai-chip {
+  background: #FFCDD2;
+  color: #C62828;
+  animation: slideInChip 0.3s ease-out;
+}
+
+.rmw-reply-chips-section .ai-chip:hover {
+  background: #EF9A9A;
+}
+
+/* Saved message chips (green background) */
+.rmw-reply-chips-section .saved-message-chip {
+  background: #4CAF50;
+  color: white;
+  animation: slideInChip 0.3s ease-out;
+}
+
+.rmw-reply-chips-section .saved-message-chip:hover {
+  background: #388E3C;
+}
+
+@keyframes slideInChip {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Save Message Overlay */
+.save-message-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 1200;
+  animation: fadeIn 0.15s ease-out;
+}
+
+.save-message-popup {
+  position: absolute;
+  transform: translateX(-50%);
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  padding: 4px;
+  animation: popIn 0.2s ease-out;
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+.save-message-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: none;
+  background: white;
+  color: #333;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 6px;
+  white-space: nowrap;
+  transition: background 0.2s;
+}
+
+.save-message-btn:hover {
+  background: #f0f0f0;
+}
+
+.save-message-btn svg {
+  color: #4CAF50;
+  stroke: #4CAF50;
+}
+
+/* Input Area */
+.rmw-input-area {
+  display: flex;
+  align-items: flex-end;
+  padding: 8px 12px;
+  background: white;
+  gap: 8px;
+  border-top: 1px solid #E0E0E0;
+}
+
+.rmw-input-area .attachment-btn {
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rmw-input-area .input-container {
+  flex: 1;
+  position: relative;
+  padding: 4px 0;
+}
+
+/* Decline CTA Area */
+.rmw-decline-area {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  background: white;
+  gap: 12px;
+  border-top: 1px solid #E0E0E0;
+}
+
+/* Declined Message Bubble */
+.message-bubble.declined {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-left: auto;
+  background: transparent;
+  padding: 0;
+}
+
+.message-bubble.declined .declined-bubble-content {
+  background: white;
+  border: 2px dashed #D0D0D0;
+  border-radius: 12px;
+  padding: 12px 16px;
+  text-align: right;
+}
+
+.message-bubble.declined .declined-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.message-bubble.declined .declined-subtitle {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.message-bubble.declined .declined-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.rmw-decline-area .decline-text {
+  font-size: 13px;
+  color: #666;
+}
+
+.rmw-decline-area .decline-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border: 1px solid #D0D0D0;
+  border-radius: 20px;
+  background: white;
+  font-size: 13px;
+  color: #333;
+  cursor: pointer;
+}
+
+.rmw-decline-area .decline-btn:hover {
+  background: #f5f5f5;
+}
+
+.rmw-decline-area .decline-icon {
+  font-size: 12px;
+  color: #666;
+}
+
+.rmw-input-area .reply-input {
+  width: 100%;
+  padding: 10px 0;
+  border: 1px solid #E0E0E0;
+  border-radius: 20px;
+  font-size: 14px;
+  resize: none;
+  min-height: 40px;
+  max-height: 100px;
+  outline: none;
+  font-family: inherit;
+}
+
+.rmw-input-area .reply-input:focus {
+  border-color: #BDBDBD;
+}
+
+.rmw-input-area .send-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #4CAF50;
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.rmw-input-area .send-btn:disabled {
+  background: #E0E0E0;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.rmw-input-area .send-btn:not(:disabled):hover {
+  background: #43A047;
+}

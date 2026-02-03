@@ -1,5 +1,6 @@
 .profile-list-container {
-  max-width: 360px;
+  width: 100%;
+  max-width: 100%;
   margin: 0 auto;
   background-color: #f5f5f5;
   min-height: 720px;

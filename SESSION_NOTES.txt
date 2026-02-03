@@ -1,0 +1,38 @@
+========================================
+SESSION NOTES - February 1, 2026
+========================================
+
+WHAT WE WERE WORKING ON:
+-------------------------
+
+1. MESSAGE WINDOW UI (MessageWindow.js / MessageWindow.css)
+   ✅ Header shows only "Active 2h ago" 
+   ✅ Profile name removed from profile-card-meta
+   ✅ Custom cam-recorder.png icon for video call button
+   ✅ Horizontally scrollable saved drafts chips
+   ✅ Chips populate textarea when clicked
+   ✅ "Saved Drafts" label removed
+   ✅ Auto-expanding textarea
+   ✅ AI refresh icon added (red color)
+   ✅ Send button = 44px
+
+2. SAVED MESSAGE BOTTOM SHEET
+   ✅ Removed "Set as default message for all future interest" checkbox
+   (Compose message is now always saved as default)
+
+3. PENDING / IN PROGRESS:
+   ⚠️ cam-recorder.png icon not loading in MessageWindow header
+   - File exists at: dist/images/cam-recorder.png
+   - Referenced as: /images/cam-recorder.png
+   - Need to verify it displays correctly
+
+4. VS CODE FIXES:
+   ✅ Added .vscode/settings.json to exclude dist/node_modules from watching
+   ✅ This should prevent OOM crashes
+
+========================================
+TO START WORKING:
+- Server runs on: http://localhost:5000
+- Build command: npm run build
+- Start server: node server.js
+========================================
